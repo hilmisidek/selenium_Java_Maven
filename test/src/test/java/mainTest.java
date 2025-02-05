@@ -9,12 +9,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.swing.text.html.HTMLDocument.Iterator;
-import java.util.TreeMap;
-
-import java.util.Map;
-import java.util.TreeMap;
-
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
@@ -24,6 +18,16 @@ import org.testng.annotations.Test;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.*;
+
+import io.restassured.RestAssured;
+import io.restassured.http.Header;
+import io.restassured.http.Headers;
+import io.restassured.http.Method;
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
+import io.restassured.specification.RequestSpecification;
+
 
 
 public class mainTest {
@@ -130,11 +134,110 @@ public class mainTest {
 
     }
 
+    @Test
+    public void test_get(){
+        RestAssured.baseURI="https://demoqa.com/BookStore/v1/Books";
+        RequestSpecification httpRequest=RestAssured.given();
+        Response response = httpRequest.get("");
+        System.out.println("Response body = " + response.asPrettyString());
+        int status_code = response.getStatusCode();
+        Assert.assertEquals(status_code, 200, "CORRECT STATUS CODE");
+        
+        //System.out.println("Response = " + response.prettyPrint());
+
+    }
+
+    @Test
+    public void test_get_fail(){
+        RestAssured.baseURI =  "https://demoqa.com/Account/v1/User/";
+        RequestSpecification httpRequest=RestAssured.given();
+        Response response = httpRequest.get("test");
+        int status_code = response.getStatusCode();
+        Assert.assertEquals(status_code, 401);
+
+    }
+
+    @Test
+    public void get_header(){
+        RestAssured.baseURI =  "https://demoqa.com/BookStore/v1/Books";
+        RequestSpecification httpRequest=RestAssured.given();
+        Response response = httpRequest.get("");
+
+        Headers allHeaders = response.headers();
+
+        for (Header header : allHeaders){
+            System.out.println("Key : " + header.getName() + " Value : " + header.getValue());
+        }
+
+    }
+    @Test
+    public void get_specific_header(){
+        RestAssured.baseURI = "https://demoqa.com/BookStore/v1/Books";
+        RequestSpecification httpRequest = RestAssured.given();
+        Response response = httpRequest.get("");
+
+        String content_type = response.header("Content-Type");
+        System.out.println ("Content Type : " + content_type);
+        Assert.assertEquals(content_type, "application/json; charset=utf-8", "content_type is correct");
+
+        String server_type = response.header ("Server");
+        System.out.println ("Server : " + server_type);
+        Assert.assertEquals(server_type, "nginx/1.17.10 (Ubuntu)");
+
+        String acceptlang = response.header ("Content-Encoding");
+        System.out.println ("Content-Encoding : " + acceptlang);
+        Assert.assertEquals(acceptlang, null);
+
+    }    
+
+    @Test
+    public void read_body(){
+        RestAssured.baseURI="https://demoqa.com/BookStore/v1/Books";
+        RequestSpecification httpRequest = RestAssured.given();
+        Response response = httpRequest.get();
+
+        ResponseBody body = response.getBody();
+        System.out.println(body.asPrettyString());
+        
+    }
+
+    @Test
+    public void check_body_column(){
+        RestAssured.baseURI="https://demoqa.com/BookStore/v1/Books";
+        RequestSpecification httpRequest = RestAssured.given();
+        Response response = httpRequest.get();
+
+        ResponseBody body = response.getBody();
+        
+        String body_content = body.asString();
+
+        Assert.assertEquals(body_content.contains( "Speaking JavaScript"),true);
+
+    }
+
+    @Test
+    public void check_single_body_node(){
+        RestAssured.baseURI="https://apichallenges.eviltester.com/sim/entities";
+        RequestSpecification httpRequest = RestAssured.given();
+        ResponseBody response = httpRequest.get("1");
+
+        JsonPath jsonBodyPath = response.jsonPath();
+
+        System.out.println ("name : " + jsonBodyPath.get("name"));
+
+
+    }
+
+
+
+
     @AfterClass
     public void end(){
         System.out.println("Test End");
         driver.close();
     }
+
+
 
 
 }
