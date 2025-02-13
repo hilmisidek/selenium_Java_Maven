@@ -48,11 +48,11 @@ public class mainTest {
         XSSFWorkbook workbook= new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Employee Data");
         Map<String, Object[]> data = new TreeMap<String, Object[]>();
-    data.put("1", new Object[] {"ID", "NAME", "LASTNAME"});
-    data.put("2", new Object[] {1, "Amit", "Shukla"});
-    data.put("3", new Object[] {2, "Lokesh", "Gupta"});
-    data.put("4", new Object[] {3, "John", "Adwards"});
-    data.put("5", new Object[] {4, "Brian", "Schultz"});
+        data.put("1", new Object[] {"ID", "NAME", "LASTNAME"});
+        data.put("2", new Object[] {1, "Amit", "Shukla"});
+        data.put("3", new Object[] {2, "Lokesh", "Gupta"});
+        data.put("4", new Object[] {3, "John", "Adwards"});
+        data.put("5", new Object[] {4, "Brian", "Schultz"});
     
     //Iterate over data and write to sheet
 
@@ -92,19 +92,25 @@ public class mainTest {
         //Create Workbook instance holding reference to .xlsx file
         XSSFWorkbook workbook = new XSSFWorkbook(file);
         //Get first/desired sheet from the workbook
+        
         XSSFSheet sheet = workbook.getSheetAt(0);
-        Row row = sheet.getRow(0);
-        Cell cell = row.getCell(0);
-        System.out.println(sheet.getRow(0).getCell(0));
+        
+        Row Header = sheet.getRow(0);
+        //Cell Id = Header.getCell(0);
+        //Cell name = Header.getCell(1);
+        System.out.println(Header.getCell(0) + "|" + Header.getCell(1));
+        
         Row row1 = sheet.getRow(1);
-        Cell cell1 = row1.getCell(1);
-        System.out.println(sheet.getRow(0).getCell(1));
-        Row row2 = sheet.getRow(1);
-        Cell cell2 = row2.getCell(1);
-        System.out.println(sheet.getRow(1).getCell(0));
-        Row row3 = sheet.getRow(1);
-        Cell cell3 = row3.getCell(1);
-        System.out.println(sheet.getRow(1).getCell(1));
+        //Cell cell1 = row1.getCell(1);
+        System.out.println(row1.getCell(0) + "|" + row1.getCell(1));
+        
+        Row row2 = sheet.getRow(2);
+        //Cell cell2 = row2.getCell(1);
+        System.out.println(row2.getCell(0) + "|" + row2.getCell(1));
+        
+        Row row3 = sheet.getRow(3);
+        //Cell cell3 = row3.getCell(1);
+        System.out.println(row3.getCell(0) + "|" + row3.getCell(1));
         
         System.out.println("");
         file.close();
