@@ -13,6 +13,8 @@ This repository serves as a starting point for learning Selenium with Java and M
 - Java
 - Maven
 - Selenium
+- RestAssured
+- Apache POI for Excel I/O
 
 ## Setup Instructions
 1. Clone the repository to your local machine using `git clone [repository URL]`.
